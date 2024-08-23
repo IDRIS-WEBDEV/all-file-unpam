@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code Scanner</title>
+    <!-- Tambahkan html5-qrcode library -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <!-- jQuery untuk memudahkan penulisan AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Tambahkan CSS untuk memastikan div scanner memiliki ukuran */
+        #reader {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>QR Code Scanner</h1>
+    <!-- Div untuk menampilkan QR code scanner -->
+    <div id="reader"></div>
+
+    <form id="qr-form">
+        <label for="qr-data">Scanned Data:</label>
+        <input type="text" id="qr-data" name="qr_data" readonly>
+        <div id="result"></div>
+    </form>
+
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // Masukkan data yang di-scan ke dalam form input
+            document.getElementById('qr-data').value = decodedText;
+
+            // Otomatis memicu event untuk mencari data ke database
+            $("#qr-data").trigger("input");
+        }
+
+        function onScanError(errorMessage) {
+            // Jika terjadi kesalahan dalam scanning, Anda bisa menanganinya di sini
+            console.warn(`QR Code scan error: ${errorMessage}`);
+        }
+
+        // Memulai scanner
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: 250 },
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
+    </script>
+
+</body>
+
+</html>
